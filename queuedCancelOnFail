@@ -9,6 +9,7 @@ class unDoQueued
     // Array is used to implement a Queue 
     constructor() { 
         this.items = []; 
+        this.inHold = false;
     } 
                   
     // Functions to be implemented 
@@ -25,10 +26,10 @@ class unDoQueued
     // on empty queue 
       if(this.isEmpty()) 
           return undefined; 
-      return this.items.shift(); 
+      return this.items.shift();  
     } 
     //Wipes out the queue
-    purge(){
+    purge(){ 
       this.items = []; 
     }
     
@@ -58,7 +59,6 @@ function unDoPromised(queue){
         resolve({"queue":queue, "id":id+", "});
       else{
         //clean the queue to stop processing the other promises
-        queue.purge();
         reject( {
           "queue":queue,
           "id":id+", ",
@@ -73,10 +73,10 @@ function unDoPromised(queue){
       $('#msg').html(msg + icon);
     } 
   })
-  .catch(value => {
+  .catch(value => {     
+    value.queue.purge();
     //given an error, clean the queue
     console.log("Catch got this:" + value.msg);
-    value.queue.clear();
   })
 }
 var msg = 'Execution order: '
@@ -89,4 +89,3 @@ console.log(msg);
 for (var i=1;i<10;i++){
     unDo.enqueue(i);
 }
-
