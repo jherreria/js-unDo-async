@@ -1,0 +1,92 @@
+//Simulates User clicking undo fast. 
+//The undo logic is async call
+//The calls are enqueued to ensure they are executed sequential
+// If one unDo failes, the rest are not executed; the queue is purged.
+
+// Queue class 
+class unDoQueued 
+{ 
+    // Array is used to implement a Queue 
+    constructor() { 
+        this.items = []; 
+    } 
+                  
+    // Functions to be implemented 
+    enqueue(element) {     
+    // adding element to the queue 
+      this.items.push(element); 
+      console.log("Enqueued: "+ element);
+    //each time an element is enquequed, then call its Promise to be executed.
+      unDoPromised(this);
+    } 
+    dequeue(){ 
+    // removing element from the queue 
+    // returns undefined when called  
+    // on empty queue 
+      if(this.isEmpty()) 
+          return undefined; 
+      return this.items.shift(); 
+    } 
+    //Wipes out the queue
+    purge(){
+      this.items = []; 
+    }
+    
+    // isEmpty function 
+    isEmpty() { 
+       // return true if the queue is empty. 
+       return this.items === undefined || this.items.length == 0; 
+    }
+    // printQueue() 
+} 
+
+function unDoPromised(queue){
+  var ttt = Math.random() *3000;
+  
+  return new Promise((resolve, reject) =>{
+    //setTimeout is used to simulate a url call 
+    setTimeout(function restDoingUndo() {
+      //check if elements to process exist
+      if(queue.isEmpty()) {
+        return resolve({"queue":queue});
+      }
+      let id  = queue.dequeue();
+      console.log("unDoing: "+id+" latency:"+ttt);
+      
+      //fails at random
+      if(Math.random() > 0.25 ) 
+        resolve({"queue":queue, "id":id+", "});
+      else{
+        //clean the queue to stop processing the other promises
+        queue.purge();
+        reject( {
+          "queue":queue,
+          "id":id+", ",
+          "msg":"Cannot do "+id});
+      }
+    }, ttt);
+      
+  })
+  .then(value => {
+    if(value.id){
+      msg += value.id;
+      $('#msg').html(msg + icon);
+    } 
+  })
+  .catch(value => {
+    //given an error, clean the queue
+    console.log("Catch got this:" + value.msg);
+    value.queue.clear();
+  })
+}
+var msg = 'Execution order: '
+var icon = ' <i class="fa fa-smile-o"></i>'
+
+var unDo = new unDoQueued();
+
+console.log(msg);
+
+for (var i=1;i<10;i++){
+    unDo.enqueue(i);
+}
+
