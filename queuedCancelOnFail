@@ -9,7 +9,6 @@ class unDoQueued
     // Array is used to implement a Queue 
     constructor() { 
         this.items = []; 
-        this.inHold = false;
     } 
                   
     // Functions to be implemented 
