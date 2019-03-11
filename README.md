@@ -1,6 +1,6 @@
 # js-unDo-async
 This example shows a way to ensure JavaScript Promises are executed in the sequence they are being created.
-
+It can be run at: https://playcode.io/264763?tabs=console&script.js&output
 badcode.js - Illustrates the problem when an operation expected to be done in sequence but is called asynchronous.
 
 badcode.js will undo out of sequence (at random). An output example is:
