@@ -17,11 +17,10 @@ function unDoPromised(id){
   })
 }
 var msg = 'Execution order: '
-var icon = ' <i class="fa fa-smile-o"></i>'
+var icon = ' <i class="fa fa-frown-o"></i>'
 
 console.log(msg);
-for (var i=1;i<5;i++){
+for (var i=1;i<10;i++){
     unDoPromised(i);
 }
     
-//$('#msg').html(msg + icon)
